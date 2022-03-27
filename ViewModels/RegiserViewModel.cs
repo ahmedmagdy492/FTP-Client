@@ -10,6 +10,7 @@ namespace FTP_Client.ViewModels
     public class RegiserViewModel
     {
         [Required]
+        [RegularExpression("^[A-Za-z]+[0-9]*$")]
         public string Username { get; set; }
         [Required]
         public string Password { get; set; }

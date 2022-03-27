@@ -24,18 +24,28 @@
     <div class="row align-items-center h-100">
         <div class="col-3 mx-auto">
             <div class="text-center">
-                <a class="navbar-brand brand-logo" asp-page="/index">
+                <a class="navbar-brand brand-logo" asp-page="/Login">
                     <img id="profile-img" class="rounded-circle profile-img-card" src="~/imgs/ftp.png" />
                 </a>
                 <a style="color: white" class="navbar-brand brand-logo">
                     FTP Client
                 </a>
                 <p id="profile-name" class="profile-name-card"></p>
-                <form class="form-signin">
-                    <input type="text" name="Username" id="inputPassword" class="form-control form-group" placeholder="username" required autofocus>
-                    <input type="password" name="Password" id="inputPassword" class="form-control form-group" placeholder="password" required autofocus>
+                <form class="form-signin" method="post" asp-action="/Login">
+                    <input type="text" name="LoginViewModel.Username" id="inputUsername" class="form-control form-group" placeholder="username" required autofocus>
+                    <span asp-validation-for="LoginViewModel.Username" class="text-danger"></span>
+
+                    <input type="password" name="LoginViewModel.Password" id="inputPassword" class="form-control form-group" placeholder="password" required>
+                    <span asp-validation-for="LoginViewModel.Password" class="text-danger"></span>
+
                     <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Login</button>
                 </form><!-- /form -->
+
+                <div class="row mt-2">
+                    <div class="col-md-12">
+                        <a asp-page="/Register" class="btn btn-success btn btn-lg btn-block btn-signin">Create an Account</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

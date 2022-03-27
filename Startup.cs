@@ -30,6 +30,11 @@ namespace FTP_Client
             services.AddTransient<IHashing, Sha256Hashing>();
             services.AddTransient<IAuthRepository, AuthRepository>();
 
+            services.AddAuthentication("CookieAuth").AddCookie("CookieAuth", options =>
+            {
+                options.Cookie.Name = "FTPClient";
+                options.LoginPath = "/Login";
+            });
             services.AddRazorPages();
 
             services.AddDbContext<AppDBContext>(config =>
@@ -57,6 +62,7 @@ namespace FTP_Client
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

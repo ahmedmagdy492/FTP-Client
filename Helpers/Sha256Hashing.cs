@@ -22,7 +22,8 @@ namespace FTP_Client.Helpers
         public string Hash(string plainText)
         {
             string textAndKey = configuration.GetSection("Options").GetValue<string>("Key") + plainText;
-            return Encoding.UTF8.GetString(sha256.ComputeHash(Encoding.UTF8.GetBytes(textAndKey)));
+            byte[] input = Encoding.UTF8.GetBytes(textAndKey);
+            return Utility.DecodeHex(Encoding.UTF8.GetString(sha256.ComputeHash(input)));
         }
     }
 }
