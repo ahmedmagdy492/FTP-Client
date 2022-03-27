@@ -1,6 +1,10 @@
+using FTP_Client.EntityConfig;
+using FTP_Client.Helpers;
+using FTP_Client.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -23,7 +27,15 @@ namespace FTP_Client
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<IHashing, Sha256Hashing>();
+            services.AddTransient<IAuthRepository, AuthRepository>();
+
             services.AddRazorPages();
+
+            services.AddDbContext<AppDBContext>(config =>
+            {
+                config.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
