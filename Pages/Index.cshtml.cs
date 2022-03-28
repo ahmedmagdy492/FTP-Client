@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FTP_Client.Models;
+using FTP_Client.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
@@ -12,17 +14,20 @@ namespace FTP_Client.Pages
     [Authorize]
     public class IndexModel : PageModel
     {
-        private readonly ILogger<IndexModel> _logger;
+        private readonly IConnectionRepository _connectionRepository;
 
-        public IndexModel(ILogger<IndexModel> logger)
+        public List<Connection> Connections { get; private set; }
+
+        public IndexModel(IConnectionRepository connectionRepository)
         {
-            _logger = logger;
+            _connectionRepository = connectionRepository;
         }
 
         
-        public void OnGet()
+        public async Task OnGet()
         {
-
+            var userID = HttpContext.User.Claims.ToList()[0].Value;
+            Connections = await _connectionRepository.GetConnectionsByUserID(Convert.ToInt64(userID));
         }
     }
 }

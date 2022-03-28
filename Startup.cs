@@ -29,6 +29,7 @@ namespace FTP_Client
         {
             services.AddTransient<IHashing, Sha256Hashing>();
             services.AddTransient<IAuthRepository, AuthRepository>();
+            services.AddTransient<IConnectionRepository, ConnectionRepository>();
 
             services.AddAuthentication("CookieAuth").AddCookie("CookieAuth", options =>
             {

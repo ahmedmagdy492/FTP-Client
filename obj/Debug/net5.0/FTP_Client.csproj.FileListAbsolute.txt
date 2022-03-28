@@ -383,3 +383,10 @@ D:\Current_Projects\FTP Client\FTP_Client\FTP_Client\bin\Debug\net5.0\runtimes\w
 D:\Current_Projects\FTP Client\FTP_Client\FTP_Client\bin\Debug\net5.0\Humanizer.dll
 D:\Current_Projects\FTP Client\FTP_Client\FTP_Client\bin\Debug\net5.0\Microsoft.EntityFrameworkCore.Design.dll
 D:\Current_Projects\FTP Client\FTP_Client\FTP_Client\obj\Debug\net5.0\Razor\Pages\Register.cshtml.g.cs
+D:\Current_Projects\FTP Client\FTP_Client\FTP_Client\obj\Debug\net5.0\Razor\Pages\NewConnectionPopup.cshtml.g.cs
+D:\Current_Projects\FTP Client\FTP_Client\FTP_Client\bin\Debug\net5.0\System.Data.SqlClient.dll
+D:\Current_Projects\FTP Client\FTP_Client\FTP_Client\bin\Debug\net5.0\runtimes\win-arm64\native\sni.dll
+D:\Current_Projects\FTP Client\FTP_Client\FTP_Client\bin\Debug\net5.0\runtimes\win-x64\native\sni.dll
+D:\Current_Projects\FTP Client\FTP_Client\FTP_Client\bin\Debug\net5.0\runtimes\win-x86\native\sni.dll
+D:\Current_Projects\FTP Client\FTP_Client\FTP_Client\bin\Debug\net5.0\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
+D:\Current_Projects\FTP Client\FTP_Client\FTP_Client\bin\Debug\net5.0\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
