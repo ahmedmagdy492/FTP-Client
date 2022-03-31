@@ -4,6 +4,7 @@ using FTP_Client.Repository;
 using FTP_Client.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -31,13 +32,17 @@ namespace FTP_Client.Pages
             try
             {
                 if (!ModelState.IsValid)
-                    return Page();
+                {
+                    var errorList = ValidationHelper.GetValidationErrMsgs(ModelState.Values);
+                    return BadRequest(new { success = false, errors = errorList });
+                }
 
                 var isUsernameTaken = await _authRepository.IsUsernameAlreadyTaken(RegisterViewModel.Username);
                 if (isUsernameTaken)
                 {
                     ModelState.AddModelError("Username", "Username is Already Taken");
-                    return Page();
+                    var errorList = ValidationHelper.GetValidationErrMsgs(ModelState.Values);
+                    return BadRequest(new { success = false, errors = errorList });
                 }
 
                 RegisterViewModel.Password = _hashing.Hash(RegisterViewModel.Password);
@@ -46,12 +51,12 @@ namespace FTP_Client.Pages
                 var user = new RegisterViewModelToUserMapper().Map(RegisterViewModel);
 
                 var registerAccount = await _authRepository.Register(user);
-                return RedirectToPage("/Login");
+                return StatusCode(200, new { success = true, errors = new List<string> { }, redirectUrl = "./Login" });
             }
             catch (System.Exception ex)
             {
                 // log error
-                return Page();
+                return BadRequest(new { success = false, errors = new List<string> { ex.Message } });
             }
         }
     }

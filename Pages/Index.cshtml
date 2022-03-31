@@ -54,6 +54,11 @@
             </div>
         </div>
     }
+
+    @if(Model.Connections.Count == 0)
+    {
+        <h4 class="text-center mt-3">No Connections Added Yet <a href="javascript:void(0);" onclick="getNewConnectionPopup()">New Connection</a></h4>
+    }
 </div>
 
 @section Scripts

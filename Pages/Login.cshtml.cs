@@ -28,17 +28,29 @@ namespace FTP_Client.Pages
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if(!ModelState.IsValid)
-                return Page();
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    var errorList = ValidationHelper.GetValidationErrMsgs(ModelState.Values);
+                    return BadRequest(new { success = false, errors = errorList });
+                }
 
-            LoginViewModel.Password = _hashing.Hash(LoginViewModel.Password);
-            var loginResult = await _authRepository.Login(LoginViewModel);
-            if(loginResult == null)
-                return Page();
+                LoginViewModel.Password = _hashing.Hash(LoginViewModel.Password);
+                var loginResult = await _authRepository.Login(LoginViewModel);
+                if (loginResult == null)
+                {
+                    return BadRequest(new { success = false, errors = new List<string> { "Invalid Username or Password" } });
+                }
 
-            await HttpContext.SignInAsync(Autenticate(loginResult));
+                await HttpContext.SignInAsync(Autenticate(loginResult));
 
-            return RedirectToPage("./Index");
+                return StatusCode(200, new { success = true, errors =new List<string> { }, redirectUrl = "./Index" });
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(new { success = false, errors = new List<string> { ex.Message } });
+            }
         }
 
         #region Methods
