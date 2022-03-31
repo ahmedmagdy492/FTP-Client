@@ -31,6 +31,15 @@ namespace FTP_Client
             services.AddTransient<IAuthRepository, AuthRepository>();
             services.AddTransient<IConnectionRepository, ConnectionRepository>();
 
+            services.AddDistributedMemoryCache();
+
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(60);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
             services.AddAuthentication("CookieAuth").AddCookie("CookieAuth", options =>
             {
                 options.Cookie.Name = "FTPClient";
@@ -66,8 +75,13 @@ namespace FTP_Client
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseSession();
+
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllerRoute(
+                name: "mvc",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
         }

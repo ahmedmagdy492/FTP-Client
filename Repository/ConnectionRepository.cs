@@ -23,6 +23,11 @@ namespace FTP_Client.Repository
             return _context.Connections.Where(connection => connection.UserID == userId).ToListAsync();
         }
 
+        public Task<Connection> GetConnectionByID(string connectionID)
+        {
+            return _context.Connections.FirstOrDefaultAsync(con => con.ID == connectionID);
+        }
+
         public async Task<Connection> CreateConnection(Connection connection)
         {
             await _context.Connections.AddAsync(connection);
