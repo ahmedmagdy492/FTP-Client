@@ -1,5 +1,5 @@
 ﻿const getNewConnectionPopup = () => {
-    fetch("./NewConnectionPopup", {
+    fetch(url + "Popup/GetNewConnectionPopup", {
         method: 'GET'
     })
         .then(response => {

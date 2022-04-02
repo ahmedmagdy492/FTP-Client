@@ -43,9 +43,9 @@ namespace FTP_Client
             services.AddAuthentication("CookieAuth").AddCookie("CookieAuth", options =>
             {
                 options.Cookie.Name = "FTPClient";
-                options.LoginPath = "/Login";
+                options.LoginPath = "/Account/Login";
             });
-            services.AddRazorPages();
+            services.AddControllersWithViews();
 
             services.AddDbContext<AppDBContext>(config =>
             {
@@ -82,7 +82,6 @@ namespace FTP_Client
                 endpoints.MapControllerRoute(
                 name: "mvc",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
-                endpoints.MapRazorPages();
             });
         }
     }
