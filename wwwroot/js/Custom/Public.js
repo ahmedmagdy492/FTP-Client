@@ -75,7 +75,7 @@ const loginForm = (event, errSectionID) => {
 }
 
 const signOut = () => {
-    fetch('./Logout', {
+    fetch('Account/Logout', {
         method: 'post',
         body: {}
     })

@@ -1,0 +1,48 @@
+﻿@{
+    ViewData["Title"] = "Create an Account";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+
+<style>
+    body, html {
+        background-image: url('https://i.imgur.com/xhiRfL6.jpg');
+        height: 100%;
+    }
+
+    #profile-img {
+        height: 180px;
+    }
+
+    .h-80 {
+        height: 80% !important;
+    }
+</style>
+
+<div class="container h-80">
+    <div class="row align-items-center h-100">
+        <div class="col-4 mx-auto" style="margin-top: 110px;">
+            <div class="text-center card">
+                <div class="card-body">
+                    <a class="navbar-brand brand-logo">
+                        <img id="profile-img" class="rounded-circle profile-img-card" src="~/imgs/ftp.png" />
+                        <div class="mt-2">
+                            FTP Client
+                        </div>
+                    </a>
+                    <p id="register-err-msg" class="profile-name-card">
+
+                    </p>
+                    <form onsubmit="return loginForm(event, 'register-err-msg')" class="form-signin" method="post" action="@Url.Action("Register", "Account")">
+                        <input type="text" name="Name" id="inputName" class="form-control form-group" placeholder="name" required autofocus>
+
+                        <input type="text" name="Username" id="inputUsername" class="form-control form-group" placeholder="username" required>
+
+                        <input type="password" name="Password" id="inputPassword" class="form-control form-group" placeholder="password" required autofocus>
+
+                        <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Create Your Account</button>
+                    </form><!-- /form -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

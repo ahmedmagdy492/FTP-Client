@@ -8,9 +8,15 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FTP_Client.Filters;
+using FTP_Client.ViewModels;
+using FTP_Client.Mappers;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FTP_Client.Controllers
 {
+    [Authorize]
     public class ConnectionController : Controller
     {
         private IFTPClient _fTPClient;
@@ -26,6 +32,39 @@ namespace FTP_Client.Controllers
             return StatusCode(200, new { data = "Test Works" });
         }
 
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateNewConnection(NewConnectionViewModel model)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    var errorList = ValidationHelper.GetValidationErrMsgs(ModelState.Values);
+                    return BadRequest(new { success = false, errors = errorList });
+                }
+
+                model.UserID = Convert.ToInt64(HttpContext.User.Claims.ToList()[0].Value);
+                var connection = new NewConnectionToConnectionMapper().Map(model);
+                var createConnection = await _connectionRepository.CreateConnection(connection);
+
+                return StatusCode(200, new { success = true, errors = new List<string> { "Connection Created Successfully" } });
+            }
+            catch (DbUpdateException)
+            {
+                return BadRequest(new { success = false, errors = new List<string> { "Connection Name Already Used" } });
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(new { success = false, errors = new List<string> { ex.Message } });
+            }
+
+        }
+
         [HttpPost]
         public async Task<IActionResult> Connect(string connectionId, string username, string password)
         {
@@ -35,7 +74,7 @@ namespace FTP_Client.Controllers
                     return BadRequest(new { success = false, errors = new List<string> { "Invalid Connection ID" } });
 
                 var connection = await _connectionRepository.GetConnectionByID(connectionId);
-                if(connection == null)
+                if (connection == null)
                     return BadRequest(new { success = false, errors = new List<string> { "Invalid Connection ID" } });
 
                 // connecting to the remote server root
@@ -60,6 +99,7 @@ namespace FTP_Client.Controllers
         /// <param name="path">file path without the domain or ip and port</param>
         /// <returns></returns>
         [HttpPost]
+        [SessionFilter]
         public async Task<IActionResult> NavigateRemote(string connectionId, string path)
         {
             try
@@ -84,6 +124,7 @@ namespace FTP_Client.Controllers
         }
 
         [HttpPost]
+        [SessionFilter]
         public async Task<IActionResult> NavigateLocal(string connectionId, string path)
         {
             try
@@ -107,6 +148,7 @@ namespace FTP_Client.Controllers
         }
 
         [HttpPost]
+        [SessionFilter]
         public async Task<IActionResult> DownloadFile(string connectionId, string remoteServerPath, string localFilePath)
         {
             try
@@ -135,6 +177,7 @@ namespace FTP_Client.Controllers
         }
 
         [HttpPost]
+        [SessionFilter]
         public async Task<IActionResult> UploadFile(string connectionId, string remoteServerPath, string localFilePath)
         {
             try
