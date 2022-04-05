@@ -13,6 +13,8 @@ using FTP_Client.ViewModels;
 using FTP_Client.Mappers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using System.Text.RegularExpressions;
+using FTP_Client.HelperModels;
 
 namespace FTP_Client.Controllers
 {
@@ -21,10 +23,14 @@ namespace FTP_Client.Controllers
     {
         private IFTPClient _fTPClient;
         private readonly IConnectionRepository _connectionRepository;
+        private readonly IViewRenderService _viewRenderService;
+        private readonly IConfigReader _configReader;
 
-        public ConnectionController(IConnectionRepository connectionRepository)
+        public ConnectionController(IConnectionRepository connectionRepository, IViewRenderService viewRenderService, IConfigReader configReader)
         {
             _connectionRepository = connectionRepository;
+            this._viewRenderService = viewRenderService;
+            this._configReader = configReader;
         }
 
         public IActionResult Test()
@@ -32,8 +38,11 @@ namespace FTP_Client.Controllers
             return StatusCode(200, new { data = "Test Works" });
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string connectionID, string ip, int port)
         {
+            ViewBag.ConnectionID = connectionID;
+            ViewBag.Ip = ip;
+            ViewBag.Port = port;
             return View();
         }
 
@@ -84,7 +93,7 @@ namespace FTP_Client.Controllers
                 HttpContext.Session.SetString("Username", username);
                 HttpContext.Session.SetString("Password", password);
 
-                return StatusCode(200, new { success = true, errors = new List<string> { }, files = files });
+                return StatusCode(200, new { success = true, errors = new List<string> { }, connectionId, ip = connection.IPAddress, port = connection.Port });
             }
             catch (Exception ex)
             {
@@ -115,31 +124,8 @@ namespace FTP_Client.Controllers
                 _fTPClient = new SFTPClient(connection.IPAddress, connection.Port.Value, HttpContext.Session.GetString("Username"), HttpContext.Session.GetString("Password"));
                 List<string> files = _fTPClient.GetFiles(path).ToList();
 
-                return StatusCode(200, new { success = true, errors = new List<string> { }, remoteFiles = files });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { success = false, errors = new List<string> { ex.Message } });
-            }
-        }
-
-        [HttpPost]
-        [SessionFilter]
-        public async Task<IActionResult> NavigateLocal(string connectionId, string path)
-        {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(connectionId))
-                    return BadRequest(new { success = false, errors = new List<string> { "Invalid Connection ID" } });
-
-                var connection = await _connectionRepository.GetConnectionByID(connectionId);
-                if (connection == null)
-                    return BadRequest(new { success = false, errors = new List<string> { "Invalid Connection ID" } });
-
-                // read the entires in the local file system
-                string[] files = Directory.GetFiles(path);
-
-                return StatusCode(200, new { success = true, errors = new List<string> { }, localFiles = files });
+                ViewBag.ConnectionId = connectionId;
+                return StatusCode(200, new { success = true, errors = new List<string> { }, remoteFiles = _viewRenderService.RenderToString("Views/Shared/Connections/_RemoteFileList.cshtml", files) });
             }
             catch (Exception ex)
             {
@@ -207,5 +193,97 @@ namespace FTP_Client.Controllers
                 return BadRequest(new { success = false, errors = new List<string> { ex.Message } });
             }
         }
+
+        #region Local Actions
+        [HttpPost]
+        public async Task<IActionResult> NavigateLocal(string connectionId, string path)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(connectionId))
+                    return BadRequest(new { success = false, errors = new List<string> { "Invalid Connection ID" } });
+
+                var connection = await _connectionRepository.GetConnectionByID(connectionId);
+                if (connection == null)
+                    return BadRequest(new { success = false, errors = new List<string> { "Invalid Connection ID" } });
+
+                // read the entires in the local file system
+                // # ERROR
+                List<string> files = new List<string>();
+                if (string.IsNullOrWhiteSpace(path))
+                {
+                    files = Directory.GetLogicalDrives().ToList();
+                }
+                else
+                {
+                    files = Directory.GetFileSystemEntries(path).ToList();
+                }
+
+                return StatusCode(200, new { success = true, errors = new List<string> { }, localFiles = _viewRenderService.RenderToString("Views/Shared/Connections/_LocalFileList.cshtml", files) });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { success = false, errors = new List<string> { ex.Message } });
+            }
+        }
+
+        [HttpPost]
+        public IActionResult BackLocal(string path)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(path) || Regex.IsMatch(path, @"^[A-Za-z]{1,2}:\\$"))
+                {
+                    var drives = Directory.GetLogicalDrives().ToList();
+                    return StatusCode(200, new { success = true, errors = new List<string> { }, files = _viewRenderService.RenderToString("Views/Shared/Connections/_LocalFileList.cshtml", drives), currentPath = path });
+                }
+
+                char delimiter = '\0';
+                if (OperatingSystem.IsLinux())
+                    delimiter = '/';
+                else
+                    delimiter = '\\';
+
+                string[] dirs = path.Split(delimiter);
+                if (string.IsNullOrWhiteSpace(dirs[dirs.Length - 1]))
+                {
+                    // if the last element is a slash
+                    // removing the last 2 elments of the array
+                    dirs = dirs.Take(dirs.Length - 2).ToArray();
+                    path = string.Join(delimiter, dirs);
+                    path += delimiter;
+                    var files = Directory.GetFileSystemEntries(path).ToList();
+                    return StatusCode(200, new { success = true, errors = new List<string> { }, files = _viewRenderService.RenderToString("Views/Shared/Connections/_LocalFileList.cshtml", files), currentPath = path });
+                }
+
+                dirs = dirs.Take(dirs.Length - 1).ToArray();
+                path = string.Join(delimiter, dirs);
+                path += delimiter;
+                return StatusCode(200, new { success = true, errors = new List<string> { }, files = _viewRenderService.RenderToString("Views/Shared/Connections/_LocalFileList.cshtml", Directory.GetFileSystemEntries(path).ToList()), currentPath = path });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { success = false, errors = new List<string> { ex.Message } });
+            }
+        }
+
+        [HttpPost]
+        public IActionResult ViewContent(string path)
+        {
+            try
+            {
+                if(string.IsNullOrWhiteSpace(Path.GetExtension(path)))
+                    return BadRequest(new { success = false, errors = new List<string> { "Invalid file Name" } });
+
+                var fileContent = System.IO.File.ReadAllText(path);
+
+                return StatusCode(200, new { success = true, errors = new List<string>{ }, fileView = _viewRenderService.RenderToString("Views/Shared/Connections/_ViewContent.cshtml", new FileContent { Content = fileContent, FileName = Path.GetFileName(path) }) });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { success = false, errors = new List<string> { ex.Message } });
+            }
+        }
+        #endregion
     }
 }

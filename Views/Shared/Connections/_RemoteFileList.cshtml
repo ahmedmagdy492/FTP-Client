@@ -1,0 +1,70 @@
+﻿@using FTP_Client.Models
+@using System.IO
+@model List<string>
+
+@{
+    Layout = null;
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <div class="form-group">
+                    <input type="checkbox" class="form-check-input" />
+                </div>
+            </th>
+            <th></th>
+            <th>File Name</th>
+            @*<th>Last Date Modified</th>
+            <th>Size</th>*@
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var file in Model)
+        {
+            if (string.IsNullOrWhiteSpace(System.IO.Path.GetExtension(file)))
+            {
+                <tr>
+                    <td>
+                        <input type="checkbox" class="form-check-input" />
+                    </td>
+                    <td>
+                        <img src="~/imgs/folder.png" width="25" height="25" draggable="false" />
+                    </td>
+                    <td>
+                        <a href="javascript:void(0);">@(System.IO.Path.GetFileName(file))</a>
+                    </td>
+                </tr>
+            }
+            else if(System.IO.Path.GetExtension(file) == ".pdf")
+            {
+                <tr>
+                    <td>
+                        <input type="checkbox" class="form-check-input" />
+                    </td>
+                    <td>
+                        <img src="~/imgs/pdf.png" width="25" height="25" draggable="false" />
+                    </td>
+                    <td>
+                        <a href="">@(System.IO.Path.GetFileName(file))</a>
+                    </td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td>
+                        <input type="checkbox" class="form-check-input" />
+                    </td>
+                    <td>
+                        <img src="~/imgs/document.png" width="25" height="25" draggable="false" />
+                    </td>
+                    <td>
+                        <a href="">@(System.IO.Path.GetFileName(file))</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

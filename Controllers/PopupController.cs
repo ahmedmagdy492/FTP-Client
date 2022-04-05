@@ -14,5 +14,11 @@ namespace FTP_Client.Controllers
         {
             return PartialView("Connections/_NewConnectionPopup");
         }
+        
+        public IActionResult GetConnectionUsernameAndPassword(string connectionID)
+        {
+            ViewBag.ConnectionID = connectionID;
+            return PartialView("Connections/_ConnectionUsernameAndPassword");
+        }
     }
 }

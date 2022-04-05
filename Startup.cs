@@ -3,10 +3,12 @@ using FTP_Client.Helpers;
 using FTP_Client.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
@@ -30,8 +32,12 @@ namespace FTP_Client
             services.AddTransient<IHashing, Sha256Hashing>();
             services.AddTransient<IAuthRepository, AuthRepository>();
             services.AddTransient<IConnectionRepository, ConnectionRepository>();
+            services.AddTransient<IConfigReader, ConfigReader>();
 
             services.AddDistributedMemoryCache();
+
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<IViewRenderService, ViewRenderService>();
 
             services.AddSession(options =>
             {

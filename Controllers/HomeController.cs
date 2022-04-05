@@ -19,18 +19,24 @@ namespace FTP_Client.Controllers
             _connectionRepository = connectionRepository;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> GetConnectionList()
         {
             try
             {
                 var userID = HttpContext.User.Claims.ToList()[0].Value;
-                ViewBag.Connections = await _connectionRepository.GetConnectionsByUserID(Convert.ToInt64(userID));
-                return View();
+                var connections = await _connectionRepository.GetConnectionsByUserID(Convert.ToInt64(userID));
+
+                return PartialView("Home/_ConnectionList", connections);
             }
             catch (Exception ex)
             {
-                TempData["ErrorMsg"] = ex.Message;
-                return RedirectToAction("Error", "Public");
+                ViewBag.ErrorMsg = ex.Message;
+                return PartialView("_Result");
             }
         }
     }

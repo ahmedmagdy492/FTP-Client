@@ -37,31 +37,12 @@
     </div>
 </div>
 
-<div class="row mt-2" style="min-height: 500px;">
-    @foreach(var connection in Connections)
-    {
-        <div class="col-md-4 mt-2" style="cursor: pointer" title="Click to Connect">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">@(connection.ConnectionName) -  @(connection.IPAddress):@(connection.Port)</h4>
-                    <div class="media">
-                        <i class="ti-world icon-md text-info d-flex align-self-start me-3"></i>
-                        <div class="media-body">
-                            <p class="card-text">Last Active Connection: @(connection.LastConnectionDate?.ToString("dd dddd, MMM yyyy hh:mm tt"))</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    }
-
-    @if(Connections.Count == 0)
-    {
-        <h4 class="text-center mt-3">No Connections Added Yet <a href="javascript:void(0);" onclick="getNewConnectionPopup()">New Connection</a></h4>
-    }
+<div class="row mt-2" style="min-height: 500px;" id="list">
+    <h4 class="text-center mt-3">Loading...</h4>
 </div>
 
 @section Scripts
 {
     <script src="~/js/custom/Connections.js" ></script>
+    <script src="~/js/custom/Home.js" ></script>
 }

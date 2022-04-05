@@ -1,0 +1,95 @@
+﻿@using FTP_Client.Models
+@using System.IO
+@using System.Text.RegularExpressions
+@using System.Web
+@model List<string>
+
+@{
+    Layout = null;
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <div class="form-group">
+                    <input type="checkbox" class="form-check-input" />
+                </div>
+            </th>
+            <th></th>
+            <th>File Name</th>
+            @*<th>Last Date Modified</th>
+                <th>Size</th>*@
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+
+            </td>
+            <td>
+                <img src="~/imgs/folder.png" width="25" height="25" draggable="false" />
+            </td>
+            <td><a href="javascript:void(0);" onclick="back('@TempData["ConnectionID"]')"><b>..</b></a></td>
+        </tr>
+        @foreach (var file in Model)
+        {
+            if(Regex.IsMatch(file, @"^[A-Za-z]{1,2}:\\$"))
+            {
+                <tr>
+                    <td>
+                        <input type="checkbox" class="form-check-input" />
+                    </td>
+                    <td>
+                        <img src="~/imgs/hard-disk.png" width="25" height="25" draggable="false" />
+                    </td>
+                    <td>
+                        <a href="javascript:void(0);" onclick="navigateLocal('@TempData["ConnectionID"]','@(Regex.Escape(file))')">@file</a>
+                    </td>
+                </tr>
+            }
+            else if (string.IsNullOrEmpty(System.IO.Path.GetExtension(file)))
+            {
+                <tr>
+                    <td>
+                        <input type="checkbox" class="form-check-input" />
+                    </td>
+                    <td>
+                        <img src="~/imgs/folder.png" width="25" height="25" draggable="false" />
+                    </td>
+                    <td>
+                        <a href="javascript:void(0);" onclick="navigateLocal('@TempData["ConnectionID"]','@(Regex.Escape(HttpUtility.UrlEncode(file)))')">@(System.IO.Path.GetFileName(file))</a>
+                    </td>
+                </tr>
+            }
+            else if (System.IO.Path.GetExtension(file) == ".pdf")
+            {
+                <tr>
+                    <td>
+                        <input type="checkbox" class="form-check-input" />
+                    </td>
+                    <td>
+                        <img src="~/imgs/pdf.png" width="25" height="25" draggable="false" />
+                    </td>
+                    <td>
+                        <a href="">@(System.IO.Path.GetFileName(file))</a>
+                    </td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td>
+                        <input type="checkbox" class="form-check-input" />
+                    </td>
+                    <td>
+                        <img src="~/imgs/document.png" width="25" height="25" draggable="false" />
+                    </td>
+                    <td>
+                        <a href="javascript:void(0);" onclick="viewContent('@(Regex.Escape(HttpUtility.UrlEncode(file)))')">@(System.IO.Path.GetFileName(file))</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

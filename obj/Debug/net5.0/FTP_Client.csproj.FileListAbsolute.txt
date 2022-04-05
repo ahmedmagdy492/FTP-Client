@@ -391,3 +391,9 @@ D:\Current_Projects\FTP Client\FTP_Client\FTP_Client\obj\Debug\net5.0\Razor\View
 D:\Current_Projects\FTP Client\FTP_Client\FTP_Client\obj\Debug\net5.0\Razor\Views\Shared\_ValidationScriptsPartial.cshtml.g.cs
 D:\Current_Projects\FTP Client\FTP_Client\FTP_Client\obj\Debug\net5.0\Razor\Views\_ViewImports.cshtml.g.cs
 D:\Current_Projects\FTP Client\FTP_Client\FTP_Client\obj\Debug\net5.0\Razor\Views\_ViewStart.cshtml.g.cs
+D:\Current_Projects\FTP Client\FTP_Client\FTP_Client\obj\Debug\net5.0\Razor\Views\Shared\Connections\_ConnectionUsernameAndPassword.cshtml.g.cs
+D:\Current_Projects\FTP Client\FTP_Client\FTP_Client\obj\Debug\net5.0\Razor\Views\Shared\Home\_ConnectionList.cshtml.g.cs
+D:\Current_Projects\FTP Client\FTP_Client\FTP_Client\obj\Debug\net5.0\Razor\Views\Shared\_Result.cshtml.g.cs
+D:\Current_Projects\FTP Client\FTP_Client\FTP_Client\obj\Debug\net5.0\Razor\Views\Shared\Connections\_RemoteFileList.cshtml.g.cs
+D:\Current_Projects\FTP Client\FTP_Client\FTP_Client\obj\Debug\net5.0\Razor\Views\Shared\Connections\_LocalFileList.cshtml.g.cs
+D:\Current_Projects\FTP Client\FTP_Client\FTP_Client\obj\Debug\net5.0\Razor\Views\Shared\Connections\_ViewContent.cshtml.g.cs
