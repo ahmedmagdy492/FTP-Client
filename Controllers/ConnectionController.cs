@@ -43,6 +43,7 @@ namespace FTP_Client.Controllers
             ViewBag.ConnectionID = connectionID;
             ViewBag.Ip = ip;
             ViewBag.Port = port;
+            ViewBag.MyIP = new IPHelper().GetMyIPAddress();
             return View();
         }
 
@@ -219,7 +220,7 @@ namespace FTP_Client.Controllers
                     files = Directory.GetFileSystemEntries(path).ToList();
                 }
 
-                return StatusCode(200, new { success = true, errors = new List<string> { }, localFiles = _viewRenderService.RenderToString("Views/Shared/Connections/_LocalFileList.cshtml", files) });
+                return StatusCode(200, new { success = true, errors = new List<string> { }, localFiles = _viewRenderService.RenderToString("Views/Shared/Connections/_LocalFileList.cshtml", files), path });
             }
             catch (Exception ex)
             {
@@ -275,9 +276,26 @@ namespace FTP_Client.Controllers
                 if(string.IsNullOrWhiteSpace(Path.GetExtension(path)))
                     return BadRequest(new { success = false, errors = new List<string> { "Invalid file Name" } });
 
-                var fileContent = System.IO.File.ReadAllText(path);
+                var fileContent = System.IO.File.ReadAllBytes(path);
 
-                return StatusCode(200, new { success = true, errors = new List<string>{ }, fileView = _viewRenderService.RenderToString("Views/Shared/Connections/_ViewContent.cshtml", new FileContent { Content = fileContent, FileName = Path.GetFileName(path) }) });
+                return StatusCode(200, new { success = true, errors = new List<string>{ }, fileView = _viewRenderService.RenderToString("Views/Shared/Connections/_ViewContent.cshtml", new FileContent { Content = fileContent, FileName = Path.GetFileName(path), FullPath = path }) });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { success = false, errors = new List<string> { ex.Message } });
+            }
+        }
+
+        [HttpPost]
+        public IActionResult SaveFile(string path, string content)
+        {
+            try
+            {
+                if(string.IsNullOrWhiteSpace(path) || content == null)
+                    return BadRequest(new { success = false, errors = new List<string> { "Invalid file" } });
+
+                System.IO.File.WriteAllText(path, content);
+                return StatusCode(200, new { success = true, errors = new List<string> { } });
             }
             catch (Exception ex)
             {

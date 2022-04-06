@@ -6,6 +6,7 @@
     ViewData["Title"] = "Remote Session";
     string connectionID = ViewBag.ConnectionID;
     string ip = ViewBag.Ip;
+    string myIP = ViewBag.MyIP;
     int port = ViewBag.Port;
     TempData["ConnectionID"] = connectionID;
 }
@@ -36,10 +37,10 @@
     </ul>
 </nav>
 
-<section id="connection-section">
-    <div class="row mt-4">
+<section id="connection-section" style="background: white">
+    <div class="row mt-4 mx-2">
         <div class="col-md-12">
-            <h4> Connected to @ip:@port</h4>
+            <h4> Connection to @ip:@port - <span id="connection-status">Try to Connect...</span></h4>
         </div>
     </div>
 
@@ -50,14 +51,13 @@
             <div class="card max-height-card">
                 <div class="card-header">
                     <div class="d-flex align-items-center justify-content-between mb-2">
-                        <h4 class="card-title">Your Computer</h4>
-                        <button class="btn btn-primary">Upload</button>
+                        <h4 class="card-title">Your Computer - @myIP</h4>
+                        <button class="btn btn-primary" id="btnUpload" disabled>Upload</button>
                     </div>
-                    <input type="text" class="form-control" value="/" readonly id="fullPathInput" />
                 </div>
-                <div class="card-body" id="localContainer">
+                <section id="localContainer">
                     <h4 class="text-center mt-3">Loading...</h4>
-                </div>
+                </section>
             </div>
         </div>
         <div class="col-md-6">
@@ -65,7 +65,7 @@
                 <div class="card-header">
                     <div class="d-flex align-items-center justify-content-between mb-2">
                         <h4 class="card-title">Remote Computer - @ip</h4>
-                        <button class="btn btn-primary">Downlaod</button>
+                        <button class="btn btn-primary" disabled>Downlaod</button>
                     </div>
                     <input type="text" class="form-control" value="" readonly />
                 </div>
