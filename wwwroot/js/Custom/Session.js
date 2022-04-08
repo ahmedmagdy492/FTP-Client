@@ -196,3 +196,33 @@ const saveFile = (path) => {
             }
         });
 }
+
+// remote server select all functions
+const remoteCheckOrUnCheckAll = (event) => {
+    const selectAllCheckBox = event.target;
+    const allCheckBoxes = document.querySelectorAll(".remote-check-box");
+
+    if (selectAllCheckBox.checked === true) {
+        allCheckBoxes.forEach(c => {
+            c.checked = true;
+        });
+    }
+    else {
+        allCheckBoxes.forEach(c => {
+            c.checked = false;
+        });
+    }
+}
+
+const remoteCheckOrUnCheckOne = (event) => {
+    const selectAllCheckBox = document.querySelector('#remote-check-all');
+    const allCheckBoxes = document.querySelectorAll(".remote-check-box");
+    const checkedCheckBoxes = [...allCheckBoxes].filter(i => i.checked);
+
+    if (selectAllCheckBox.checked) {
+        selectAllCheckBox.checked = false;
+    }
+    else if (allCheckBoxes.length === checkedCheckBoxes.length) {
+        selectAllCheckBox.checked = true;
+    }
+}

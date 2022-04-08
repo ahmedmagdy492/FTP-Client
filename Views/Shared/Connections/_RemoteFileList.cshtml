@@ -23,7 +23,7 @@
             <tr>
                 <th>
                     <div class="form-group">
-                        <input type="checkbox" class="form-check-input" />
+                        <input type="checkbox" id="remote-check-all" class="form-check-input" oninput="remoteCheckOrUnCheckAll(event)" />
                     </div>
                 </th>
                 <th></th>
@@ -47,7 +47,7 @@
                 {
                     <tr>
                         <td>
-                            <input type="checkbox" class="form-check-input" />
+                            <input type="checkbox" class="form-check-input remote-check-box" oninput="remoteCheckOrUnCheckOne(event)" />
                         </td>
                         <td>
                             <img src="~/imgs/folder.png" width="20" height="20" draggable="false" />
@@ -61,7 +61,7 @@
                 {
                     <tr>
                         <td>
-                            <input type="checkbox" class="form-check-input" />
+                            <input type="checkbox" class="form-check-input remote-check-box" oninput="remoteCheckOrUnCheckOne(event)" />
                         </td>
                         <td>
                             <img src="~/imgs/pdf.png" width="20" height="20" draggable="false" />
@@ -75,7 +75,7 @@
                 {
                     <tr>
                         <td>
-                            <input type="checkbox" class="form-check-input" />
+                            <input type="checkbox" class="form-check-input remote-check-box" oninput="remoteCheckOrUnCheckOne(event)" />
                         </td>
                         <td>
                             <img src="~/imgs/document.png" width="20" height="20" draggable="false" />
