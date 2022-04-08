@@ -1,6 +1,12 @@
 ﻿let currentPath = "";
+let remoteCurrentPath = "";
 
 const navigateRemote = (conID, path) => {
+
+    remoteCurrentPath = path;
+
+    document.querySelector("#remoteContainer").innerHTML = "<div class='d-flex justify-content-center'><img src='/imgs/​​Iphone-spinner-1.gif' class='mt-4' width='35' height='35' /></div>";
+
     fetch(url + `Connection/NavigateRemote?connectionId=${conID}&path=${path}`, {
         method: 'POST'
     })
@@ -10,6 +16,9 @@ const navigateRemote = (conID, path) => {
                 document.querySelector("#remoteContainer").innerHTML = res.remoteFiles.result;
                 document.querySelector("#connection-status").style.color = "green";
                 document.querySelector("#connection-status").innerHTML = "Connected";
+
+                if (path !== '')
+                    document.querySelector("#fullPathInputRemote").value = decodeURIComponent(path);
             }
             else {
                 document.querySelector("#remoteContainer").style.color = "red";
@@ -17,6 +26,28 @@ const navigateRemote = (conID, path) => {
                 document.querySelector("#connection-status").style.color = "red";
                 document.querySelector("#connection-status").innerHTML = "Not Connected";
                 //alert(res.errors[0]);
+            }
+        });
+}
+
+const backRemote = (conId) => {
+
+    if (remoteCurrentPath === "")
+        return;
+
+    document.querySelector("#remoteContainer").innerHTML = "<div class='d-flex justify-content-center'><img src='/imgs/​​Iphone-spinner-1.gif' class='mt-4' width='35' height='35' /></div>";
+
+    fetch(url + `Connection/BackRemote?conId=${conId}&path=${remoteCurrentPath}`, {
+        method: 'POST'
+    })
+        .then(res => res.json())
+        .then(res => {
+            if (res.success === true) {
+                document.querySelector("#remoteContainer").innerHTML = res.files.result;
+                remoteCurrentPath = res.currentPath;
+            }
+            else {
+                alert(res.errors[0]);
             }
         });
 }

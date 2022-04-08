@@ -126,6 +126,7 @@ namespace FTP_Client.Controllers
                 List<string> files = _fTPClient.GetFiles(path).ToList();
 
                 ViewBag.ConnectionId = connectionId;
+                TempData["ConnectionID"] = connectionId;
                 return StatusCode(200, new { success = true, errors = new List<string> { }, remoteFiles = _viewRenderService.RenderToString("Views/Shared/Connections/_RemoteFileList.cshtml", files) });
             }
             catch (Exception ex)
@@ -261,6 +262,44 @@ namespace FTP_Client.Controllers
                 path = string.Join(delimiter, dirs);
                 path += delimiter;
                 return StatusCode(200, new { success = true, errors = new List<string> { }, files = _viewRenderService.RenderToString("Views/Shared/Connections/_LocalFileList.cshtml", Directory.GetFileSystemEntries(path).ToList()), currentPath = path });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { success = false, errors = new List<string> { ex.Message } });
+            }
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> BackRemote(string conId, string path)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(conId))
+                    return BadRequest(new { success = false, errors = new List<string> { "Invalid Connection ID" } });
+
+                var connection = await _connectionRepository.GetConnectionByID(conId);
+                if (connection == null)
+                    return BadRequest(new { success = false, errors = new List<string> { "Invalid Connection ID" } });
+
+                _fTPClient = new SFTPClient(connection.IPAddress, connection.Port.Value, HttpContext.Session.GetString("Username"), HttpContext.Session.GetString("Password"));
+                char delimiter = '/';
+
+                string[] dirs = path.Split(delimiter);
+                if (string.IsNullOrWhiteSpace(dirs[dirs.Length - 1]))
+                {
+                    // if the last element is a slash
+                    // removing the last 2 elments of the array
+                    dirs = dirs.Take(dirs.Length - 2).ToArray();
+                    path = string.Join(delimiter, dirs);
+                    path += delimiter;
+                    var files = _fTPClient.GetFiles(path).ToList();
+                    return StatusCode(200, new { success = true, errors = new List<string> { }, files = _viewRenderService.RenderToString("Views/Shared/Connections/_RemoteFileList.cshtml", files), currentPath = path });
+                }
+
+                dirs = dirs.Take(dirs.Length - 1).ToArray();
+                path = string.Join(delimiter, dirs);
+                path += delimiter;
+                return StatusCode(200, new { success = true, errors = new List<string> { }, files = _viewRenderService.RenderToString("Views/Shared/Connections/_RemoteFileList.cshtml", _fTPClient.GetFiles(path).ToList()), currentPath = path });
             }
             catch (Exception ex)
             {
