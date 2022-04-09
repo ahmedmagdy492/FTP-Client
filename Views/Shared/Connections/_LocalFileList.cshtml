@@ -79,7 +79,7 @@
                 {
                     <tr>
                         <td>
-                            <input type="checkbox" class="form-check-input local-check-box" oninput="checkOrUnCheckOne(event)" />
+                            <input type="checkbox" class="form-check-input local-check-box" oninput="checkOrUnCheckOne(event)" data-file-path="@(Regex.Escape(HttpUtility.UrlEncode(file)))" />
                         </td>
                         <td>
                             <img src="~/imgs/pdf.png" width="20" height="20" draggable="false" />
@@ -93,7 +93,7 @@
                 {
                     <tr>
                         <td>
-                            <input type="checkbox" class="form-check-input local-check-box" oninput="checkOrUnCheckOne(event)" />
+                            <input type="checkbox" class="form-check-input local-check-box" oninput="checkOrUnCheckOne(event)" data-file-path="@(HttpUtility.UrlEncode(file))" />
                         </td>
                         <td>
                             <img src="~/imgs/picture.png" width="20" height="20" draggable="false" />
@@ -107,7 +107,7 @@
                 {
                     <tr>
                         <td>
-                            <input type="checkbox" class="form-check-input local-check-box" oninput="checkOrUnCheckOne(event)" />
+                            <input type="checkbox" class="form-check-input local-check-box" oninput="checkOrUnCheckOne(event)" data-file-path="@(HttpUtility.UrlEncode(file))" />
                         </td>
                         <td>
                             <img src="~/imgs/document.png" width="20" height="20" draggable="false" />
@@ -121,7 +121,7 @@
                 {
                     <tr>
                         <td>
-                            <input type="checkbox" class="form-check-input local-check-box" oninput="checkOrUnCheckOne(event)" />
+                            <input type="checkbox" class="form-check-input local-check-box" oninput="checkOrUnCheckOne(event)" data-file-path="@(HttpUtility.UrlEncode(file))" />
                         </td>
                         <td>
                             <img src="~/imgs/document.png" width="20" height="20" draggable="false" />

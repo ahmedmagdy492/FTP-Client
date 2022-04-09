@@ -226,3 +226,49 @@ const remoteCheckOrUnCheckOne = (event) => {
         selectAllCheckBox.checked = true;
     }
 }
+
+// uploading and downloading
+const uploadfiles = (connectionID) => {
+    // show loader
+    let allSelectedFiles = [...document.querySelectorAll('.local-check-box')].filter(check => check.checked);
+
+    if (allSelectedFiles.length === 0) {
+        alert('please select at most 3 files to upload');
+        return;
+    }
+
+    if (allSelectedFiles.length > 3) {
+        alert('cannot send more than 3 files at once');
+        return;
+    }
+
+    $.blockUI({
+        message: `<div class="d-flex justify-content-center align-items-center"><p class="mr-50 mb-0">Uploading...</p> <div class="spinner-grow spinner-grow-sm text-white" role="status"></div> </div>`,
+        css: {
+            backgroundColor: 'transparent',
+            color: '#fff',
+            border: '0'
+        },
+        overlayCSS: {
+            opacity: 0.5
+        },
+        onBlock: function () {
+            allSelectedFiles.forEach(file => {
+                fetch(url + `Connection/UploadFile?connectionId=${connectionID}&remoteServerPath=${remoteCurrentPath}&localFilePath=${file.dataset.filePath}`, {
+                    method: 'post'
+                })
+                    .then(res => res.json())
+                    .then(res => {
+                        // hide loader
+                        $.unblockUI();
+                        if (res.success === true) {
+                            document.querySelector('#remoteContainer').innerHTML = res.remotefiles.result;
+                        }
+                        else {
+                            alert(res.errors[0]);
+                        }
+                    });
+            });
+        },
+    });
+}

@@ -181,14 +181,18 @@ namespace FTP_Client.Controllers
                 _fTPClient = new SFTPClient(connection.IPAddress, connection.Port.Value, HttpContext.Session.GetString("Username"), HttpContext.Session.GetString("Password"));
 
                 byte[] data = System.IO.File.ReadAllBytes(localFilePath);
-                _fTPClient.UploadFile(remoteServerPath, data);
+                _fTPClient.UploadFile($"{remoteServerPath}/{Path.GetFileName(localFilePath)}", data);
 
-                System.IO.File.WriteAllBytes(localFilePath, data);
+                //System.IO.File.WriteAllBytes(localFilePath, data);
 
                 // get the files and dirs from the remote server
-                string[] remoteFiles = _fTPClient.GetFiles(Path.GetDirectoryName(remoteServerPath)).ToArray();
+                string[] remoteFiles = null;
+                if (remoteServerPath != "\\")
+                    remoteFiles = _fTPClient.GetFiles(Path.GetDirectoryName(remoteServerPath)).ToArray();
+                else
+                    remoteFiles = _fTPClient.GetFiles(remoteServerPath).ToArray();
 
-                return StatusCode(200, new { success = true, errors = new List<string> { }, remoteFiles });
+                return StatusCode(200, new { success = true, errors = new List<string> { }, remotefiles = _viewRenderService.RenderToString("Views/Shared/Connections/_RemoteFileList.cshtml", remoteFiles.ToList()) });
             }
             catch (Exception ex)
             {
