@@ -4,6 +4,11 @@ const submitForm = (event, errSectionID, successSectionID) => {
     const formData = new FormData();
     const elements = event.target;
 
+    const submitBtn = [...elements].filter(i => i.type === 'submit')[0];
+
+    if (submitBtn !== null)
+        submitBtn.disabled = true;
+
     for (let element of elements) {
         formData.append(element.name, element.value);
     }
@@ -14,6 +19,8 @@ const submitForm = (event, errSectionID, successSectionID) => {
     })
         .then(res => res.json())
         .then(res => {
+            if (submitBtn !== null)
+                submitBtn.disabled = false;
             if (res.success === false) {
                 const parent = document.querySelector(`#${errSectionID}`);
                 parent.innerHTML = '';
@@ -46,6 +53,11 @@ const loginForm = (event, errSectionID) => {
     const formData = new FormData();
     const elements = event.target;
 
+    const submitBtn = [...elements].filter(i => i.type === 'submit')[0];
+
+    if (submitBtn !== null)
+        submitBtn.disabled = true;
+
     for (let element of elements) {
         formData.append(element.name, element.value);
     }
@@ -56,6 +68,8 @@ const loginForm = (event, errSectionID) => {
     })
         .then(res => res.json())
         .then(res => {
+            if (submitBtn !== null)
+                submitBtn.disabled = false;
             if (res.success === false) {
                 const parent = document.querySelector(`#${errSectionID}`);
                 parent.innerHTML = '';
@@ -75,7 +89,7 @@ const loginForm = (event, errSectionID) => {
 }
 
 const signOut = () => {
-    fetch('Account/Logout', {
+    fetch(url + 'Account/Logout', {
         method: 'post',
         body: {}
     })
@@ -90,6 +104,11 @@ const connect = (event, errSectionID,) => {
     const formData = new FormData();
     const elements = event.target;
 
+    const submitBtn = [...elements].filter(i => i.type === 'submit')[0];
+
+    if (submitBtn !== null)
+        submitBtn.disabled = true;
+
     for (let element of elements) {
         formData.append(element.name, element.value);
     }
@@ -100,6 +119,8 @@ const connect = (event, errSectionID,) => {
     })
         .then(res => res.json())
         .then(res => {
+            if (submitBtn !== null)
+                submitBtn.disabled = false;
             if (res.success === false) {
                 const parent = document.querySelector(`#${errSectionID}`);
                 parent.innerHTML = '';

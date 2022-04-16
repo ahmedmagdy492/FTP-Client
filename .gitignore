@@ -1,3 +1,2 @@
-./bin/
-./obj/
-./ftpclient.db
+bin/
+obj/

@@ -31,17 +31,17 @@ namespace FTP_Client.Helpers
             _password = password;
         }
 
-        public IEnumerable<string> GetFiles(string path)
+        public IEnumerable<SftpFile> GetFiles(string path)
         {
             using (SftpClient sftpClient = new SftpClient(_url, _port, _username, _password))
             {
                 sftpClient.Connect();
 
                 IEnumerable<SftpFile> files = sftpClient.ListDirectory(path);
-
+                
                 sftpClient.Disconnect();
 
-                return files.Select(f => f.FullName);
+                return files.ToList();
             }
         }
 

@@ -397,3 +397,5 @@ D:\Current_Projects\FTP Client\FTP_Client\FTP_Client\obj\Debug\net5.0\Razor\View
 D:\Current_Projects\FTP Client\FTP_Client\FTP_Client\obj\Debug\net5.0\Razor\Views\Shared\Connections\_RemoteFileList.cshtml.g.cs
 D:\Current_Projects\FTP Client\FTP_Client\FTP_Client\obj\Debug\net5.0\Razor\Views\Shared\Connections\_LocalFileList.cshtml.g.cs
 D:\Current_Projects\FTP Client\FTP_Client\FTP_Client\obj\Debug\net5.0\Razor\Views\Shared\Connections\_ViewContent.cshtml.g.cs
+D:\Current_Projects\FTP Client\FTP_Client\FTP_Client\obj\Debug\net5.0\Razor\Views\DNSResolver\Index.cshtml.g.cs
+D:\Current_Projects\FTP Client\FTP_Client\FTP_Client\obj\Debug\net5.0\Razor\Views\Shared\DNSResolver\_IPAddresses.cshtml.g.cs

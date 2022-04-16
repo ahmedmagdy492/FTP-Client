@@ -1,6 +1,89 @@
 ﻿let currentPath = "";
 let remoteCurrentPath = "";
 
+// drag and drop
+function handleDragStart(e) {
+    this.style.opacity = '0.4';
+    e.dataTransfer.effectAllowed = 'copy';
+    e.dataTransfer.setData('application/json', JSON.stringify({
+        connectionID: this.dataset.connectionId,
+        filePath: this.dataset.filePath
+    }));
+}
+
+function handleDragEnd(e) {
+    this.style.opacity = '1';
+}
+
+function handleDragOver(e) {
+    e.preventDefault();
+    return false;
+}
+
+function handleDragEnter(e) {
+}
+
+function handleDragLeave(e) {
+}
+
+function handleDrop(e) {
+    e.stopPropagation(); // stops the browser from redirecting.
+
+    let data = JSON.parse(e.dataTransfer.getData('application/json'));
+
+    $.blockUI({
+        message: `<div class="d-flex justify-content-center align-items-center"><p class="mr-50 mb-0">Uploading...</p> <div class="spinner-grow spinner-grow-sm text-white" role="status"></div> </div>`,
+        css: {
+            backgroundColor: 'transparent',
+            color: '#fff',
+            border: '0'
+        },
+        overlayCSS: {
+            opacity: 0.5
+        },
+        onBlock: function () {
+            fetch(url + `Connection/UploadFile?connectionId=${data.connectionID}&remoteServerPath=${remoteCurrentPath}&localFilePath=${data.filePath}`, {
+                method: 'post'
+            })
+                .then(res => res.json())
+                .then(res => {
+                    // hide loader
+                    $.unblockUI();
+                    if (res.success === true) {
+                        document.querySelector('#remoteContainer').innerHTML = res.remotefiles.result;
+                        setupDragAndDropEvents();
+                    }
+                    else {
+                        alert(res.errors[0]);
+                    }
+                });
+        },
+    });
+
+    return false;
+}
+
+function setupDragAndDropEvents() {
+    const allDraggableItems = [...document.querySelectorAll('.draggable-content')];
+    const container = document.querySelector('#remote-drop');
+    container.addEventListener('dragstart', handleDragStart);
+    container.addEventListener('dragend', handleDragEnd);
+    container.addEventListener('dragenter', handleDragEnter);
+    container.addEventListener('dragleave', handleDragLeave);
+    container.addEventListener('dragover', handleDragOver);
+    container.addEventListener('drop', handleDrop);
+
+
+    allDraggableItems.forEach(i => {
+        i.addEventListener('dragstart', handleDragStart);
+        i.addEventListener('dragend', handleDragEnd);
+        i.addEventListener('dragenter', handleDragEnter);
+        i.addEventListener('dragleave', handleDragLeave);
+        i.addEventListener('dragover', handleDragOver);
+        i.addEventListener('drop', handleDrop);
+    });
+}
+
 const navigateRemote = (conID, path) => {
 
     remoteCurrentPath = path;
@@ -19,6 +102,8 @@ const navigateRemote = (conID, path) => {
 
                 if (path !== '')
                     document.querySelector("#fullPathInputRemote").value = decodeURIComponent(path);
+
+                setupDragAndDropEvents();
             }
             else {
                 document.querySelector("#remoteContainer").style.color = "red";
@@ -45,6 +130,8 @@ const backRemote = (conId) => {
             if (res.success === true) {
                 document.querySelector("#remoteContainer").innerHTML = res.files.result;
                 remoteCurrentPath = res.currentPath;
+
+                setupDragAndDropEvents();
             }
             else {
                 alert(res.errors[0]);
@@ -65,6 +152,8 @@ const back = () => {
             if (res.success === true) {
                 document.querySelector("#localContainer").innerHTML = res.files.result;
                 currentPath = res.currentPath;
+
+                setupDragAndDropEvents();
             }
             else {
                 alert(res.errors[0]);
@@ -85,6 +174,8 @@ const navigateLocal = (conID, path) => {
                 document.querySelector("#localContainer").innerHTML = res.localFiles.result;
                 if (path !== '')
                     document.querySelector("#fullPathInput").value = decodeURIComponent(path);
+
+                setupDragAndDropEvents();
             }
             else {
                 //document.querySelector("#localContainer").innerHTML = res.errors[0];
@@ -229,6 +320,7 @@ const remoteCheckOrUnCheckOne = (event) => {
 
 // uploading and downloading
 const uploadfiles = (connectionID) => {
+    
     // show loader
     let allSelectedFiles = [...document.querySelectorAll('.local-check-box')].filter(check => check.checked);
 
@@ -263,6 +355,52 @@ const uploadfiles = (connectionID) => {
                         $.unblockUI();
                         if (res.success === true) {
                             document.querySelector('#remoteContainer').innerHTML = res.remotefiles.result;
+                        }
+                        else {
+                            alert(res.errors[0]);
+                        }
+                    });
+            });
+        },
+    });
+}
+
+const downloadfiles = (connectionID) => {
+
+    // show loader
+    let allSelectedFiles = [...document.querySelectorAll('.remote-check-box')].filter(check => check.checked);
+
+    if (allSelectedFiles.length === 0) {
+        alert('please select at most 3 files to download');
+        return;
+    }
+
+    if (allSelectedFiles.length > 3) {
+        alert('cannot download more than 3 files at once');
+        return;
+    }
+
+    $.blockUI({
+        message: `<div class="d-flex justify-content-center align-items-center"><p class="mr-50 mb-0">Downloading...</p> <div class="spinner-grow spinner-grow-sm text-white" role="status"></div> </div>`,
+        css: {
+            backgroundColor: 'transparent',
+            color: '#fff',
+            border: '0'
+        },
+        overlayCSS: {
+            opacity: 0.5
+        },
+        onBlock: function () {
+            allSelectedFiles.forEach(file => {
+                fetch(url + `Connection/DownloadFile?connectionId=${connectionID}&remoteServerPath=${file.dataset.filePath}&localFilePath=${currentPath}`, {
+                    method: 'post'
+                })
+                    .then(res => res.json())
+                    .then(res => {
+                        // hide loader
+                        $.unblockUI();
+                        if (res.success === true) {
+                            document.querySelector('#localContainer').innerHTML = res.localFiles.result;
                         }
                         else {
                             alert(res.errors[0]);

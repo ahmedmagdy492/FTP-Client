@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using System.Text.RegularExpressions;
 using FTP_Client.HelperModels;
+using Renci.SshNet.Sftp;
 
 namespace FTP_Client.Controllers
 {
@@ -87,14 +88,24 @@ namespace FTP_Client.Controllers
                 if (connection == null)
                     return BadRequest(new { success = false, errors = new List<string> { "Invalid Connection ID" } });
 
+                if (string.IsNullOrWhiteSpace(username))
+                    username = string.Empty;
+
+                if (string.IsNullOrWhiteSpace(password))
+                    password = string.Empty;
+
                 // connecting to the remote server root
                 _fTPClient = new SFTPClient(connection.IPAddress, connection.Port.Value, username, password);
-                List<string> files = _fTPClient.GetFiles("").ToList();
+                List<SftpFile> files = _fTPClient.GetFiles("").ToList();
 
                 HttpContext.Session.SetString("Username", username);
                 HttpContext.Session.SetString("Password", password);
 
                 return StatusCode(200, new { success = true, errors = new List<string> { }, connectionId, ip = connection.IPAddress, port = connection.Port });
+            }
+            catch (ArgumentException)
+            {
+                return BadRequest(new { success = false, errors = new List<string> { "You need to enter a username and a password" } });
             }
             catch (Exception ex)
             {
@@ -123,7 +134,7 @@ namespace FTP_Client.Controllers
 
                 // connecting to the remote server root
                 _fTPClient = new SFTPClient(connection.IPAddress, connection.Port.Value, HttpContext.Session.GetString("Username"), HttpContext.Session.GetString("Password"));
-                List<string> files = _fTPClient.GetFiles(path).ToList();
+                List<SftpFile> files = _fTPClient.GetFiles(path).ToList();
 
                 ViewBag.ConnectionId = connectionId;
                 TempData["ConnectionID"] = connectionId;
@@ -152,11 +163,11 @@ namespace FTP_Client.Controllers
                 _fTPClient = new SFTPClient(connection.IPAddress, connection.Port.Value, HttpContext.Session.GetString("Username"), HttpContext.Session.GetString("Password"));
                 byte[] data = _fTPClient.DownloadFile(remoteServerPath);
 
-                System.IO.File.WriteAllBytes(localFilePath, data);
+                System.IO.File.WriteAllBytes(Path.Combine(localFilePath, Path.GetFileName(remoteServerPath)), data);
 
                 // read the file system to get the latest updates
 
-                return StatusCode(200, new { success = true, errors = new List<string> { }, localFiles = Directory.GetDirectories(Path.GetDirectoryName(localFilePath)) });
+                return StatusCode(200, new { success = true, errors = new List<string> { }, localFiles = _viewRenderService.RenderToString("Views/Shared/Connections/_LocalFileList.cshtml", Directory.GetFileSystemEntries(localFilePath).ToList()) });
             }
             catch (Exception ex)
             {
@@ -176,6 +187,12 @@ namespace FTP_Client.Controllers
                 var connection = await _connectionRepository.GetConnectionByID(connectionId);
                 if (connection == null)
                     return BadRequest(new { success = false, errors = new List<string> { "Invalid Connection ID" } });
+                
+                if(Directory.Exists(localFilePath))
+                {
+                    // directory transfer
+                    return BadRequest(new { success = false, errors = new List<string> { "Directory Transfer is not yet supported" } });
+                }
 
                 // connecting to the remote server root
                 _fTPClient = new SFTPClient(connection.IPAddress, connection.Port.Value, HttpContext.Session.GetString("Username"), HttpContext.Session.GetString("Password"));
@@ -186,11 +203,11 @@ namespace FTP_Client.Controllers
                 //System.IO.File.WriteAllBytes(localFilePath, data);
 
                 // get the files and dirs from the remote server
-                string[] remoteFiles = null;
+                SftpFile[] remoteFiles = null;
                 if (remoteServerPath != "\\")
                     remoteFiles = _fTPClient.GetFiles(Path.GetDirectoryName(remoteServerPath)).ToArray();
                 else
-                    remoteFiles = _fTPClient.GetFiles(remoteServerPath).ToArray();
+                    remoteFiles = _fTPClient.GetFiles(remoteServerPath ?? string.Empty).ToArray();
 
                 return StatusCode(200, new { success = true, errors = new List<string> { }, remotefiles = _viewRenderService.RenderToString("Views/Shared/Connections/_RemoteFileList.cshtml", remoteFiles.ToList()) });
             }
