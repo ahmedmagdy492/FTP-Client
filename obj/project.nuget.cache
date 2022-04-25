@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "MKIOJLQllw5agwxYh4D+ccsYwOdqkg7KiHm5JVnYkCOxGyGZETCXgQGc3/lvgjGINf/UsiVdMhJzCy0NnRq6vA==",
+  "dgSpecHash": "XKSA8YPMEbqBqDmGmx/ZHvza++Suxg/syG+Dmds3BJR9CwD8WDTqLJ2qPOL6C4oddxT6eW0Gt8MLf/C3oTwygA==",
   "success": true,
-  "projectFilePath": "D:\\Current_Projects\\FTP Client\\FTP_Client\\FTP_Client\\FTP_Client.csproj",
+  "projectFilePath": "D:\\Current_Projects\\FTP Client\\FTP_Client\\FTP-Client\\FTP_Client.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Ahmed\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\Ahmed\\.nuget\\packages\\microsoft.aspnetcore.mvc.razor.extensions\\5.0.14\\microsoft.aspnetcore.mvc.razor.extensions.5.0.14.nupkg.sha512",

@@ -67,7 +67,7 @@
                 }
                 else if (System.IO.Path.GetExtension(file.FullName) == ".pdf")
                 {
-                    <tr draggable="true" class="draggable-content">
+                    <tr draggable="true" class="remote-draggable-content" data-connection-id="@TempData["ConnectionID"]" data-file-path="@(HttpUtility.UrlEncode(file.FullName))">
                         <td>
                             <input type="checkbox" data-file-path="@(Regex.Escape(HttpUtility.UrlEncode(file.FullName)))" class="form-check-input remote-check-box" oninput="remoteCheckOrUnCheckOne(event)" />
                         </td>
@@ -125,7 +125,7 @@
                 }
                 else
                 {
-                    <tr draggable="true"  class="draggable-content">
+                    <tr draggable="true"  class="remote-draggable-content" data-connection-id="@TempData["ConnectionID"]" data-file-path="@(HttpUtility.UrlEncode(file.FullName))">
                         <td>
                             <input type="checkbox" data-file-path="@(HttpUtility.UrlEncode(file.FullName))" class="form-check-input remote-check-box" oninput="remoteCheckOrUnCheckOne(event)" />
                         </td>
@@ -175,7 +175,7 @@
                                 </svg>
                         </td>
                         <td>
-                            <a href="">@(file.Name)</a>
+                            <a href="javascript:void(0);">@(file.Name)</a>
                         </td>
                         <td>
                             @(file.Attributes.LastAccessTime)

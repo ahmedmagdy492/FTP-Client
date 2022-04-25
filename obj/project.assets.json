@@ -2207,11 +2207,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Current_Projects\\FTP Client\\FTP_Client\\FTP_Client\\FTP_Client.csproj",
+      "projectUniqueName": "D:\\Current_Projects\\FTP Client\\FTP_Client\\FTP-Client\\FTP_Client.csproj",
       "projectName": "FTP_Client",
-      "projectPath": "D:\\Current_Projects\\FTP Client\\FTP_Client\\FTP_Client\\FTP_Client.csproj",
+      "projectPath": "D:\\Current_Projects\\FTP Client\\FTP_Client\\FTP-Client\\FTP_Client.csproj",
       "packagesPath": "C:\\Users\\Ahmed\\.nuget\\packages\\",
-      "outputPath": "D:\\Current_Projects\\FTP Client\\FTP_Client\\FTP_Client\\obj\\",
+      "outputPath": "D:\\Current_Projects\\FTP Client\\FTP_Client\\FTP-Client\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Ahmed\\AppData\\Roaming\\NuGet\\NuGet.Config",

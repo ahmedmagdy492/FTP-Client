@@ -30,6 +30,7 @@ function handleDrop(e) {
     e.stopPropagation(); // stops the browser from redirecting.
 
     let data = JSON.parse(e.dataTransfer.getData('application/json'));
+    let uri = 'Connection/UploadFile';
 
     $.blockUI({
         message: `<div class="d-flex justify-content-center align-items-center"><p class="mr-50 mb-0">Uploading...</p> <div class="spinner-grow spinner-grow-sm text-white" role="status"></div> </div>`,
@@ -42,7 +43,7 @@ function handleDrop(e) {
             opacity: 0.5
         },
         onBlock: function () {
-            fetch(url + `Connection/UploadFile?connectionId=${data.connectionID}&remoteServerPath=${remoteCurrentPath}&localFilePath=${data.filePath}`, {
+            fetch(url + `${uri}?connectionId=${data.connectionID}&remoteServerPath=${remoteCurrentPath}&localFilePath=${data.filePath}`, {
                 method: 'post'
             })
                 .then(res => res.json())
@@ -65,6 +66,7 @@ function handleDrop(e) {
 
 function setupDragAndDropEvents() {
     const allDraggableItems = [...document.querySelectorAll('.draggable-content')];
+    const remoteDraggableItems = [...document.querySelectorAll('.remote-draggable-content')];
     const container = document.querySelector('#remote-drop');
     container.addEventListener('dragstart', handleDragStart);
     container.addEventListener('dragend', handleDragEnd);
@@ -72,6 +74,14 @@ function setupDragAndDropEvents() {
     container.addEventListener('dragleave', handleDragLeave);
     container.addEventListener('dragover', handleDragOver);
     container.addEventListener('drop', handleDrop);
+
+    const localContainer = document.querySelector('#left-drag');
+    //localContainer.addEventListener('dragstart', handleDragStart);
+    //localContainer.addEventListener('dragend', handleDragEnd);
+    //localContainer.addEventListener('dragenter', handleDragEnter);
+    //localContainer.addEventListener('dragleave', handleDragLeave);
+    //localContainer.addEventListener('dragover', handleDragOver);
+    //localContainer.addEventListener('drop', handleDropForLocal);
 
 
     allDraggableItems.forEach(i => {
@@ -82,6 +92,15 @@ function setupDragAndDropEvents() {
         i.addEventListener('dragover', handleDragOver);
         i.addEventListener('drop', handleDrop);
     });
+
+    //remoteDraggableItems.forEach(i => {
+    //    i.addEventListener('dragstart', handleDragStart);
+    //    i.addEventListener('dragend', handleDragEnd);
+    //    i.addEventListener('dragenter', handleDragEnter);
+    //    i.addEventListener('dragleave', handleDragLeave);
+    //    i.addEventListener('dragover', handleDragOver);
+    //    i.addEventListener('drop', handleDrop);
+    //});
 }
 
 const navigateRemote = (conID, path) => {
