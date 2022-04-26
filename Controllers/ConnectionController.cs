@@ -94,6 +94,9 @@ namespace FTP_Client.Controllers
                 if (string.IsNullOrWhiteSpace(password))
                     password = string.Empty;
 
+                connection.LastConnectionDate = DateTime.Now;
+                await _connectionRepository.Update(connection);
+
                 // connecting to the remote server root
                 _fTPClient = new SFTPClient(connection.IPAddress, connection.Port.Value, username, password);
                 List<SftpFile> files = _fTPClient.GetFiles("").ToList();

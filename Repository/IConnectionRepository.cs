@@ -10,5 +10,6 @@ namespace FTP_Client.Repository
         Task<bool> DeleteConnection(Connection connection);
         Task<List<Connection>> GetConnectionsByUserID(long? userId);
         Task<Connection> GetConnectionByID(string connectionID);
+        Task<bool> Update(Connection connection);
     }
 }

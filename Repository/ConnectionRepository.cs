@@ -40,5 +40,11 @@ namespace FTP_Client.Repository
             _context.Entry(connection).State = EntityState.Deleted;
             return await _context.SaveChangesAsync() > 0;
         }
+
+        public async Task<bool> Update(Connection connection)
+        {
+            _context.Entry(connection).State = EntityState.Modified;
+            return await _context.SaveChangesAsync() > 0;
+        }
     }
 }
