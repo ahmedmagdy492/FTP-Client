@@ -29,5 +29,19 @@ namespace FTP_Client.Helpers
             string extension = Path.GetExtension(file);
             return extension == ".txt" || extension == ".py" || extension == ".cs" || extension == ".js" || extension == ".json" || extension == ".xml" || extension == ".csv" || extension == ".java" || extension == ".vb";
         }
+
+        public static string GetExtension(string mimeType)
+        {
+            switch (mimeType)
+            {
+                case "image/jpeg":
+                    return ".jpg";
+                case "image/png":
+                    return ".png";
+                case "application/pdf":
+                    return ".pdf";
+            }
+            return "";
+        }
     }
 }
