@@ -458,6 +458,15 @@
           }
         }
       },
+      "Net.Codecrete.QrCodeGenerator/2.0.3": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/QrCodeGenerator.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/QrCodeGenerator.dll": {}
+        }
+      },
       "runtime.native.System.Data.SqlClient.sni/4.7.0": {
         "type": "package",
         "dependencies": {
@@ -1511,6 +1520,21 @@
         "version.txt"
       ]
     },
+    "Net.Codecrete.QrCodeGenerator/2.0.3": {
+      "sha512": "BeqKvqzObTJWAs+Fk+LH5jOdISZObzlks/qPBbxEp12fUYn7Kv6OiGg7gynO4SHSgVhXbOqc+k2VZnInhQOeoA==",
+      "type": "package",
+      "path": "net.codecrete.qrcodegenerator/2.0.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/netstandard2.0/QrCodeGenerator.dll",
+        "lib/netstandard2.0/QrCodeGenerator.xml",
+        "logo.png",
+        "net.codecrete.qrcodegenerator.2.0.3.nupkg.sha512",
+        "net.codecrete.qrcodegenerator.nuspec"
+      ]
+    },
     "runtime.native.System.Data.SqlClient.sni/4.7.0": {
       "sha512": "9kyFSIdN3T0qjDQ2R0HRXYIhS3l5psBzQi6qqhdLz+SzFyEy4sVxNOke+yyYv8Cu8rPER12c3RDjLT8wF3WBYQ==",
       "type": "package",
@@ -2197,6 +2221,7 @@
       "Microsoft.EntityFrameworkCore >= 5.0.15",
       "Microsoft.EntityFrameworkCore.Design >= 5.0.15",
       "Microsoft.EntityFrameworkCore.Sqlite >= 5.0.15",
+      "Net.Codecrete.QrCodeGenerator >= 2.0.3",
       "SSH.NET >= 2020.0.1",
       "System.Data.SqlClient >= 4.8.3"
     ]
@@ -2258,6 +2283,10 @@
             "target": "Package",
             "version": "[5.0.15, )"
           },
+          "Net.Codecrete.QrCodeGenerator": {
+            "target": "Package",
+            "version": "[2.0.3, )"
+          },
           "SSH.NET": {
             "target": "Package",
             "version": "[2020.0.1, )"
@@ -2285,7 +2314,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.302\\RuntimeIdentifierGraph.json"
       }
     }
   }

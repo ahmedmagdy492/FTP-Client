@@ -48,7 +48,7 @@ namespace FTP_Client
 
             services.AddAuthentication("CookieAuth").AddCookie("CookieAuth", options =>
             {
-                options.Cookie.Name = "FTPClient";
+                options.Cookie.Name = "CookieAuth";
                 options.LoginPath = "/Account/Login";
             });
             services.AddControllersWithViews();
@@ -57,6 +57,8 @@ namespace FTP_Client
             {
                 config.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
             });
+
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -73,7 +75,7 @@ namespace FTP_Client
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();

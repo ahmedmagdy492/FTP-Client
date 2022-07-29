@@ -58,6 +58,10 @@
               "target": "Package",
               "version": "[5.0.15, )"
             },
+            "Net.Codecrete.QrCodeGenerator": {
+              "target": "Package",
+              "version": "[2.0.3, )"
+            },
             "SSH.NET": {
               "target": "Package",
               "version": "[2020.0.1, )"
@@ -85,7 +89,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.302\\RuntimeIdentifierGraph.json"
         }
       }
     }
