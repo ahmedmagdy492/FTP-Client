@@ -45,10 +45,10 @@
                                 </a>
                             </li>
                         </ul>
-                        <form class="d-flex">
-                            <input class="form-control me-sm-2" type="text" placeholder="Search">
-                            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-                        </form>
+                        <div class="d-flex">
+                            <input class="form-control me-sm-2" type="text" placeholder="Search" id="search-input">
+                            <button onclick="searchByName()" class="btn btn-secondary my-2 my-sm-0" type="button">Search</button>
+                        </div>
                         @if (User.Identity.IsAuthenticated)
                         {
                             <ul class="navbar-nav">
@@ -68,7 +68,7 @@
         </header>
 
         <div class="row m-2">
-            <div class="col-m-12">
+            <div class="col-m-12" id="search-result">
                 @RenderBody()
             </div>
         </div>

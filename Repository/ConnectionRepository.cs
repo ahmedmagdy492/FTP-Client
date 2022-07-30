@@ -18,6 +18,11 @@ namespace FTP_Client.Repository
             _context = context;
         }
 
+        public List<Connection> GetConnectionsBy(Func<Connection, bool> exp)
+        {
+            return _context.Connections.Where(exp).ToList();
+        }
+
         public Task<List<Connection>> GetConnectionsByUserID(long? userId)
         {
             return _context.Connections.Where(connection => connection.UserID == userId).ToListAsync();

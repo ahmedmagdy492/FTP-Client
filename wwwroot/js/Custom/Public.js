@@ -151,3 +151,19 @@ const getConnectPopup = (conID) => {
             $("#defaultModal").modal("show");
         });
 }
+
+const searchByName = () => {
+    const name = document.querySelector('#search-input').value;
+    if (name) {
+        fetch(url + `Connection/SearchByConnectionName?conName=${name}`, {
+            method: 'post'
+        })
+            .then(res => res.json())
+            .then(res => {
+                document.querySelector('#search-result').innerHTML = res.view.result;
+            });
+    }
+    else {
+        alert('Please enter part or the entire connection name');
+    }
+}

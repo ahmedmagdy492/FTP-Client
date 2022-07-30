@@ -1,5 +1,6 @@
 ﻿using FTP_Client.Helpers;
 using FTP_Client.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -14,6 +15,7 @@ using System.Threading.Tasks;
 
 namespace FTP_Client.Controllers
 {
+    [Authorize]
     public class MobileConnectionController : Controller
     {
         private readonly IConfiguration _configuration;

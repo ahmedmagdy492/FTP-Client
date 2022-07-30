@@ -34,6 +34,18 @@ namespace FTP_Client.Controllers
             this._configReader = configReader;
         }
 
+        [HttpPost]
+        public IActionResult SearchByConnectionName(string conName)
+        {
+            if(string.IsNullOrWhiteSpace(conName))
+            {
+                return BadRequest(new { success = false, message = "Invalid connection name" });
+            }
+
+            var connections = _connectionRepository.GetConnectionsBy(con => con.ConnectionName.ToLower().Contains(conName.ToLower()));
+            return StatusCode(200, new { success = true, view = _viewRenderService.RenderToString("Connections/_ConnectionsList", connections) });
+        }
+
         public IActionResult Test()
         {
             return StatusCode(200, new { data = "Test Works" });

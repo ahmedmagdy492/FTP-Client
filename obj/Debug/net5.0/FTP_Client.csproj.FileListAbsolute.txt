@@ -803,3 +803,4 @@ D:\Current_Projects\FTP Client\FTP_Client\FTP-Client\obj\Debug\net5.0\FTP_Client
 D:\Current_Projects\FTP Client\FTP_Client\FTP-Client\obj\Debug\net5.0\ref\FTP_Client.dll
 D:\Current_Projects\FTP Client\FTP_Client\FTP-Client\bin\Debug\net5.0\libman.json
 D:\Current_Projects\FTP Client\FTP_Client\FTP-Client\bin\Debug\net5.0\QrCodeGenerator.dll
+D:\Current_Projects\FTP Client\FTP_Client\FTP-Client\obj\Debug\net5.0\Razor\Views\Shared\Connections\_ConnectionsList.cshtml.g.cs
