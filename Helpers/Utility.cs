@@ -40,6 +40,10 @@ namespace FTP_Client.Helpers
                     return ".png";
                 case "application/pdf":
                     return ".pdf";
+                case "video/mp4":
+                case "audio/mp4":
+                case "application/mp4":
+                    return ".mp4";
             }
             return "";
         }

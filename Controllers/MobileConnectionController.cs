@@ -41,6 +41,7 @@ namespace FTP_Client.Controllers
         }
 
         [HttpPost]
+        [RequestSizeLimit(100_000_000)]
         public IActionResult SendFiles([FromBody]UploadFileViewModel model)
         {
             try
